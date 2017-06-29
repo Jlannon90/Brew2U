@@ -1,23 +1,30 @@
 var User = require('./../js/beer.js').userModule;
-// var initMap = require('./../js/beer.js').initMapModule;
+var initMap = require('./../js/beer.js').initMapModule;
 
 
-var displayBreweries = function(breweryData) {
-  $('.showBreweries').append(breweryData);
+var displayBreweries = function(array) {
+  array.forEach(function(data) {
+    $(".showBreweries").append('<li>' + data.name + '<br>' + data.streetAddress + '<br>' + data.phone + '<br>' + data.website +  '<br>' + data.hoursOfOperation + '</li>');
+  });
 };
 
 $(document).ready(function() {
-  // initMap();
+  initMap();
   $("#user-form").submit(function(event) {
     event.preventDefault();
-    $('.showBreweries').empty();
+    $(".showBreweries").empty();
+
+
+
     var currentUserObject = new User();
     var location = $("#location").val();
+    var lngLatArray;
     if (isNaN(parseFloat(location))) {
-      currentUserObject.getBeerWithCity(location, displayBreweries);
+      lngLatArray = currentUserObject.getBeerWithCity(location, displayBreweries);
     } else {
-      currentUserObject.getBeerWithZip(location, displayBreweries);
+      lngLatArray = currentUserObject.getBeerWithZip(location, displayBreweries);
     }
+    currentUserObject.dropPin(location, lngLatArray);
     // var radius = $("#radius").val();
     // console.log(location);
     // console.log(currentUserObject);
